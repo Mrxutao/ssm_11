@@ -1,0 +1,73 @@
+package com.ssm.controller;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.ssm.pojo.Provider;
+import com.ssm.service.ProviderService;
+
+@Controller
+@RequestMapping("/provider")
+public class ProviderController {
+
+	@Resource
+	private ProviderService providerService;
+	
+	/**
+	 * 查询所有供应商列表
+	 */
+	@RequestMapping("/providerlist")
+	public String findproviderList(Model model) {
+		List<Provider>ProviderList=providerService.FindProvider();
+		model.addAttribute("ProviderList", ProviderList);
+		return "providerlist";
+	}
+	
+	/**
+	 * 模糊查询
+	 */
+	@RequestMapping("/findlike")	
+	public String findlike(String queryProCode,String queryProName,Model model) {
+		List<Provider>ProviderList=providerService.getProviderfindllike(queryProCode, queryProName);
+		model.addAttribute("ProviderList", ProviderList);
+		return "providerlist";
+	}
+	
+	/**
+	 * 根据id查询
+	 */
+	@RequestMapping("/findprovider")
+	public String findprovider(Integer id,Model model) {
+		Provider provider=providerService.get(id);
+		model.addAttribute("provider", provider);
+		return "providerview";
+	}
+	
+	/**
+	 * 根据id删除供应商
+	 */
+	@RequestMapping("/delprovider")
+	public String delProvider(@RequestParam Integer id) {
+		Integer i=providerService.delProvider(id);
+		/*if(i!=1) {
+			return"false";
+		}
+		return"true";*/
+			return"redirect:/provider/providerlist.do";
+	}
+	/**
+	 * 根据id查看供应商、修改。
+	 */
+	@RequestMapping("/findidupdate")
+	public String findidupdate(Integer proid,Model model) {
+		Provider provider=providerService.get(proid);
+		model.addAttribute("provider", provider);
+		return "providermodify";
+	}
+}

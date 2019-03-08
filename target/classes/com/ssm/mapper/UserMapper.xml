@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssm.mapper.UserMapper">
+	<!--查看所有用户 -->
+	<select id="findAll" resultType="com.ssm.pojo.User"
+		parameterType="com.ssm.pojo.User">
+		SELECT* FROM smbms_user LIMIT #{start},#{pageItem}
+	</select>
+	<!-- 登录验证 -->
+	<select id="login" resultType="com.ssm.pojo.User" parameterType="com.ssm.pojo.User">
+		Select * from smbms_user
+		<where>
+			userName=#{userCode} and userPassword=#{userPassword}
+		</where>
+	</select>
+	<!--根据id查询用户 -->
+	<select id="get" resultType="com.ssm.pojo.User" parameterType="com.ssm.pojo.User">
+		Select * from smbms_user
+		where id=#{id}
+	</select>
+	<!-- 添加数据 -->
+
+	<insert id="add" parameterType="com.ssm.pojo.User">
+		insert into smbms_user (userCode,userName,userPassword,gender,birthday,phone,
+								address,userRole,createdBy,creationDate,idPicPath) 
+				values (#{userCode},#{userName},#{userPassword},#{gender},#{birthday},#{phone},
+				#{address},#{userRole},#{createdBy},#{creationDate},#{idPicPath})
+	</insert>
+	<!-- 根据id删除用户 -->
+	<delete id="del" parameterType="Integer">
+		delete from smbms_user
+		where
+		id=#{id}
+	</delete>
+	<!-- 模糊查询 -->
+	<select id="findlist" parameterType="com.ssm.pojo.User" resultType="com.ssm.pojo.User">
+		Select * from smbms_user
+		<where>
+			<if test="userName!=null">
+				and userName like CONCAT('%',#{userName},'%')
+			</if>
+			<if test="userRole!=null">
+				and userRole like CONCAT('%',#{userRole},'%')
+			</if>
+		</where>
+	</select>
+	<!-- 查询总条数 -->
+	<select id="countItem" resultType="Integer">
+		SELECT COUNT(*) FROM
+		smbms_user
+	</select>
+	<!--查询所有用户信息 -->
+	<select id="findUserAll" resultType="com.ssm.pojo.User"
+		parameterType="com.ssm.pojo.User">
+		Select *from smbms_user
+	</select>
+	<!-- 修改用户 -->
+	<update id="update" parameterType="com.ssm.pojo.User">
+		 update  smbms_user
+        <set>
+            <if test="userCode!=null and userCode!='' ">
+                userCode=#{userCode},
+            </if>
+            <if test="userName!=null and  userName!=''">
+                userName=#{userName},
+            </if>
+            <if test="userPassword!=null and  userPassword!=''">
+                userPassword=#{userPassword},
+            </if>
+            <if test="gender!=null and  gender!=''">
+                gender=#{gender},
+            </if>
+            <if test="birthday!=null and  birthday!=''">
+                birthday=#{birthday},
+            </if>
+            <if test="phone!=null and  phone!=''">
+                phone=#{phone},
+            </if>
+            <if test="address!=null and  address!=''">
+                address=#{address},
+            </if>
+            <if test="userRole!=null and  userRole!=''">
+                userRole=#{userRole},
+            </if>
+            <if test="modifyDate!=null and  modifyDate!=''">
+                modifyDate=#{modifyDate},
+            </if>
+        </set>
+        where id=#{id}
+	</update>
+	
+	 <select id="getUserList" resultType="com.ssm.pojo.User">
+         SELECT * FROM smbms_user where 1=1
+    <if test="userName!='' and userName!=null">
+        and userName LIKE CONCAT('%',#{userName},'%')
+    </if>
+    <if test="userRole>0">
+        and userRole=#{userRole}
+    </if>
+    LIMIT #{pages},8
+    </select>
+	
+	 <select id="getRoleList" resultType="com.ssm.pojo.Role">
+        SELECT * FROM smbms_role
+    </select>
+    
+    <select id="selectCount" resultType="int">
+		SELECT COUNT(0)as abc FROM smbms_user WHERE 1=1
+		<if test="userName!='' and userName!=null">
+            and userName LIKE CONCAT('%',#{userName},'%')
+        </if>
+        <if test="userRole!='' and userRole!=null">
+            and userRole=#{userRole}
+        </if>
+	</select>
+	<!--  验证用户唯一性-->
+	<select id="fingByMap" resultType="com.ssm.pojo.User">
+		select * from smbms_user where 1=1
+		<if test="map!=null">
+			<foreach collection="map.keys" item="key">
+				and ${key} = #{map[${key}]}
+			</foreach>
+		</if>
+	</select>
+</mapper>

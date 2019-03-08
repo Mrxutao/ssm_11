@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssm.mapper.UserMapper">
+	<!--查看所有用户 -->
+	<select id="findAll" resultType="com.ssm.pojo.User"
+		parameterType="com.ssm.pojo.User">
+		SELECT* FROM smbms_user LIMIT #{start},#{pageItem}
+	</select>
+	<!-- 登录验证 -->
+	<select id="login" resultType="com.ssm.pojo.User" parameterType="com.ssm.pojo.User">
+		Select * from smbms_user
+		<where>
+			userName=#{userCode} and userPassword=#{userPassword}
+		</where>
+	</select>
+	<!--根据id查询用户 -->
+	<select id="get" resultType="com.ssm.pojo.User" parameterType="com.ssm.pojo.User">
+		Select * from smbms_user
+		where id=#{id}
+	</select>
+	<!-- 添加数据 -->
+
+	<insert id="add" parameterType="com.ssm.pojo.User">
+		INSERT INTO
+		`smbms`.`smbms_user`
+		(userCode,userName,userPassword,gender,birthday,phone,address,userRole)
+		VALUES(#{userCode},#{userName},#{userPassword},#{gender},#{birthday},#{phone},#{address},#{userRole});
+	</insert>
+	<!-- 根据id删除用户 -->
+	<delete id="del" parameterType="Integer">
+		delete from smbms_user
+		where
+		id=#{id}
+	</delete>
+	<!-- 模糊查询 -->
+	<select id="findlist" parameterType="com.ssm.pojo.User" resultType="com.ssm.pojo.User">
+		Select * from smbms_user
+		<where>
+			<if test="userName!=null">
+				and userName like CONCAT('%',#{userName},'%')
+			</if>
+			<if test="userRole!=null">
+				and userRole like CONCAT('%',#{userRole},'%')
+			</if>
+		</where>
+	</select>
+	<!-- 查询总条数 -->
+	<select id="countItem" resultType="Integer">
+		SELECT COUNT(*) FROM
+		smbms_user
+	</select>
+	<!--查询所有用户信息 -->
+	<select id="findUserAll" resultType="com.ssm.pojo.User"
+		parameterType="com.ssm.pojo.User">
+		Select *from smbms_user
+	</select>
+	<!-- 修改用户 -->
+	<update id="update" parameterType="Integer">
+		update smbms_user
+		<set>
+			<if test="userName!=null">userName=#{userName}</if>
+			<if test="gender!=null">gender=#{gender}</if>
+			<if test="birthday!=null">birthday=#{birthday}</if>
+			<if test="phone!=null">phone=#{phone}</if>
+			<if test="address!=null">userName=#{address}</if>
+			<if test="userRole!=null">userName=#{userRole}</if>
+		</set>
+		where id=#{id}
+	</update>
+	
+	
+	
+</mapper>

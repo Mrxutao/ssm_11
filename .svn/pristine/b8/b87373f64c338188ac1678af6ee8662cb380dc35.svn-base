@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssm.mapper.BillMapper">
+	<!-- 查询所有商品 -->
+	<select id="Findmerchandise" parameterType="com.ssm.pojo.Bill" resultType="com.ssm.pojo.Bill">
+		Select * from smbms_bill
+	</select>		
+	<!--根据id删除  -->
+	<delete id="del" parameterType="Integer">
+		delete from smbms_bill
+			where id=#{id}
+	</delete>
+	<!--根据id查看商品  -->
+	<select id="get" parameterType="com.ssm.pojo.Bill" resultType="com.ssm.pojo.Bill">
+		Select * from smbms_bill
+		where id=#{id}
+	</select>
+	
+	<select id="getfindProviderBill" resultMap="FindBill">
+		SELECT b.*,p.id as p_id,p.proName FROM smbms_bill b,smbms_provider p 
+		WHERE p.id=b.providerId
+	</select>
+	
+	<resultMap type="com.ssm.pojo.Bill" id="FindBill">
+		<id property="id" column="id"/>
+		<result property="productName" column="productName"/>
+		<collection property="getProviderList" select="ss" column="id"/>
+	</resultMap>
+	<select id="ss" resultType="com.ssm.pojo.Bill">
+		select * from smbms_provider
+	</select>
+	<!--提交商品  -->
+	<insert id="addbill" parameterType="com.ssm.pojo.Bill">
+		insert into smbms_bill(billCode,productName,productUnit,productCount,totalPrice,providerId,isPayment)values
+		(#{billCode},#{productName},#{productUnit},#{productCount},#{totalPrice},#{providerId},#{isPayment})
+	</insert>
+</mapper>

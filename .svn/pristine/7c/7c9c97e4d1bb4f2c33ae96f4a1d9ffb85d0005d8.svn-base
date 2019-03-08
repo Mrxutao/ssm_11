@@ -1,0 +1,55 @@
+package com.ssm.service;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.ssm.pojo.User;
+import com.ssm.util.Page;
+
+public interface UserService {
+	
+	/**
+	 * 查看所有 用户
+	 * @return
+	 */
+	public void findAll(Page page);
+	
+	
+	/**
+	 * 添加用户数据
+	 */
+	public int add(User user);
+	
+	
+	/**
+	 * 登录验证
+	 */
+	public User login(String userName,String userPassword);
+	
+	/**
+	 * 根据id查看
+	 */
+	public User get(@Param("id")Integer id);
+	
+	
+	/**
+	 * 根据id用户删除
+	 */
+	public int del(@Param("id") Integer id);
+	
+	/**
+	 * 模糊查询
+	 */
+	public List<User> findlist(@Param("userName") String userName, @Param("userRole") String userRole);
+	
+	/**
+	 * 查询所有用户信息
+	 */
+	public List<User>findUserAll();
+	
+	/**
+	 * 修改用户数据
+	 */
+	public int update(User user);
+}

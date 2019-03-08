@@ -1,0 +1,61 @@
+package com.ssm.controller;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.ssm.pojo.Bill;
+import com.ssm.service.BillService;
+import com.ssm.service.UserService;
+
+@Controller
+@RequestMapping("/bill")
+public class BillController {
+
+	@Resource
+	private BillService billService;
+	
+	/**
+	 * 查询所有商品列表
+	 */
+	@RequestMapping("/billList")
+	public String billList(Model model) {
+		List<Bill>billList=billService.Findmerchandise();
+		model.addAttribute("billList", billList);
+		return "billlist";
+	}
+	
+	/**
+	 * 根据id删除
+	 */
+	@RequestMapping("/billdel")
+	public String billdel(Integer id,Model model) {
+		Integer billList=billService.billdel(id);
+		model.addAttribute("billList", billList);
+		return "redirect:/bill/billList.do";
+	}
+	
+	/**
+	 * 根据id查看商品
+	 */
+	@RequestMapping("/findbill")
+	public String findbill(Model model,Integer id) {
+		Bill bill=billService.get(id);
+		model.addAttribute("bill", bill);
+		return "billview";
+	}
+	
+	/**
+	 * 根据id修改商品
+	 */
+	@RequestMapping("/toupdate")
+	public String toupdate(Integer id,Model model) {
+		Bill bill=billService.get(id);
+		model.addAttribute("bill", bill);
+		return"billmodify";
+	}
+}
